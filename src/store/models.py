@@ -10,6 +10,9 @@ class Customer(models.Model):
     name = models.CharField(max_length=200, null=True)
     email = models.EmailField(null=True, blank=True)
 
+    class Meta:
+        verbose_name = 'Customers'
+
     def __str__(self):
         return self.name
 
@@ -19,6 +22,9 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     digital = models.BooleanField(default=False, null=True, blank=True)
     image = models.ImageField(null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Products'
 
     @property
     def imageUrl(self):
@@ -38,6 +44,9 @@ class Order(models.Model):
     complete = models.BooleanField(default=True, null=True, blank=True)
     transaction_id = models.CharField(max_length=30, null=True)
 
+    class Meta:
+        verbose_name = 'Products'
+
     def __str__(self):
         return str(self.id)
 
@@ -45,14 +54,13 @@ class Order(models.Model):
     def get_cart_total(self):
         return sum(item.get_total for item in self.orderitem_set.all())
 
-
     @property
     def get_quantity(self):
         return sum(item.quantity for item in self.orderitem_set.all())
 
     @property
     def shipping(self):
-        shipping =False
+        shipping = False
         orderitems = self.orderitem_set.all()
         for ele in orderitems:
             if ele.product.digital == False:
@@ -65,6 +73,9 @@ class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
     quantity = models.IntegerField(default=0, null=True, blank=True)
     date_added = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Order Items'
 
     @property
     def get_total(self):
@@ -79,6 +90,9 @@ class ShippingAddress(models.Model):
     state = models.CharField(max_length=200, null=False)
     zipcode = models.CharField(max_length=6, null=False)
     date_added = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Shipping Address List'
 
     def __str__(self):
         return self.zipcode
